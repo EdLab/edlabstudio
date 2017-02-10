@@ -27,7 +27,7 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2hvaGE5OSIsImEiOiJaMTFkbWtZIn0.2ohvXTb0qeQUH2I-flBkmg';
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/shoha99/ciylp3yo8004g2smg0wryxo48',
+    style: 'mapbox://styles/shoha99/ciyzv99pc004n2sq8c2eh9lot',
     scrollZoom: false,
     center: [-73.965, 40.785],
     zoom: 10
@@ -47,7 +47,7 @@ map.on('click', function (e) {
 
     var popup = new mapboxgl.Popup({offset: [0,-15]})
         .setLngLat(feature.geometry.coordinates)
-        .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>') 
+        .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>')
         .setLngLat(feature.geometry.coordinates)
         .addTo(map);
 });
