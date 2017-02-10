@@ -7,8 +7,16 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
     <style>
-        body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
+        body {
+        	margin:0;
+        	padding:0;
+        }
+        #map {
+        	position:absolute;
+        	top:0;
+        	bottom:0;
+        	width:100%;
+        }
     </style>
 </head>
 <body>
@@ -16,19 +24,20 @@
 <div id='map'></div>
 
 <script>
-mapboxgl.accessToken = 'pk.eyJ1Ijoic2hvaGE5OSIsImEiOiJaMTFkbWtZIn0.2ohvXTb0qeQUH2I-flBkmg'; // replace with your access token
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2hvaGE5OSIsImEiOiJaMTFkbWtZIn0.2ohvXTb0qeQUH2I-flBkmg';
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/shoha99/ciylp3yo8004g2smg0wryxo48', // replace this with your style URL
+    style: 'mapbox://styles/shoha99/ciylp3yo8004g2smg0wryxo48',
     scrollZoom: false,
     center: [-73.965, 40.785],
     zoom: 10
 });
+setTimeout(function (e) {
+	console.log(map);
+}, 1000);
 
 map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, {
-        layers: ['seen-in-ny-episodes'] // replace this with the name of the layer in your style
-    });
+    var features = map.queryRenderedFeatures(e.point, {layers: ['seen-in-ny-episodes']});
 
     if (!features.length) {
         return;
