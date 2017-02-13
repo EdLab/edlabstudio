@@ -4,6 +4,10 @@
     <meta charset='utf-8' />
     <title>EdLab Studio - Seen In NY</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
     <style>
@@ -24,7 +28,12 @@
 <div id='map'></div>
 
 <script>
-mapboxgl.accessToken = 'pk.eyJ1Ijoic2hvaGE5OSIsImEiOiJaMTFkbWtZIn0.2ohvXTb0qeQUH2I-flBkmg';
+accessToken = 'pk.eyJ1Ijoic2hvaGE5OSIsImEiOiJaMTFkbWtZIn0.2ohvXTb0qeQUH2I-flBkmg';
+var mapLoaded = false;
+var dataLoaded = false;
+var geojson_data = null;
+
+mapboxgl.accessToken = accessToken.toString();
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/shoha99/ciyzv99pc004n2sq8c2eh9lot',
@@ -32,31 +41,62 @@ var map = new mapboxgl.Map({
     center: [-73.965, 40.785],
     zoom: 10
 });
-setTimeout(function (e) {
-	console.log(map);
-}, 1000);
-
-map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, {layers: ['seen-in-ny-episodes']});
-
-    if (!features.length) {
-        return;
-    }
-
-    var feature = features[0];
-
-    var popup = new mapboxgl.Popup({offset: [0,-15]})
-        .setLngLat(feature.geometry.coordinates)
-        .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>')
-        .setLngLat(feature.geometry.coordinates)
-        .addTo(map);
-});
-
-map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['seen-in-ny-episodes'] });
-    map.getCanvas().style.cursor = features.length ? 'pointer' : '';
-});
 
 // Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.NavigationControl());
+
+map.on('load', function () {
+    console.log("map loaded");
+    mapLoaded = true;
+    if (dataLoaded === true) {
+        render_geojson();
+    };
+})
+
+var dataset_api = "https://api.mapbox.com/datasets/v1/shoha99/ciyloqvms00302wk1sl0tpt1c/features";
+$.get(dataset_api, {access_token: accessToken}, function (data) {
+    geojson_data = JSON.parse(JSON.stringify(data));
+    for (var i = 0; i < geojson_data.features; i++) {
+        geojson_data.features[i].properties['marker-symbol'] = 'marker-15-red';
+    }
+    console.log("data loaded");
+    dataLoaded = true;
+    if (mapLoaded === true) {
+        render_geojson();
+    };
+})
+
+var render_geojson = function () {
+    console.log("rendering data");
+    map.addSource('siny_points', {
+        type: 'geojson',
+        data: geojson_data
+    });
+    map.addLayer({
+        'id': 'siny_points',
+        'type': 'symbol',
+        'source': 'siny_points',
+        'layout': {
+            'icon-image': 'marker-15-green'
+        }
+    });
+
+    map.on('click', function (e) {
+        var features = map.queryRenderedFeatures(e.point, {layers: ['siny_points']});
+        if (!features.length) {
+            return;
+        }
+        var feature = features[0];
+        var popup = new mapboxgl.Popup({offset: [0,-15]})
+            .setLngLat(feature.geometry.coordinates)
+            .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>')
+            .setLngLat(feature.geometry.coordinates)
+            .addTo(map);
+    });
+
+    map.on('mousemove', function (e) {
+        var features = map.queryRenderedFeatures(e.point, { layers: ['siny_points'] });
+        map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+    });
+};
 </script>
