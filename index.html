@@ -32,6 +32,7 @@ accessToken = 'pk.eyJ1Ijoic2hvaGE5OSIsImEiOiJaMTFkbWtZIn0.2ohvXTb0qeQUH2I-flBkmg
 var mapLoaded = false;
 var dataLoaded = false;
 var geojson_data = null;
+var latest_data = null;
 
 mapboxgl.accessToken = accessToken.toString();
 var map = new mapboxgl.Map({
@@ -55,9 +56,14 @@ map.on('load', function () {
 
 var dataset_api = "https://api.mapbox.com/datasets/v1/shoha99/ciyloqvms00302wk1sl0tpt1c/features";
 $.get(dataset_api, {access_token: accessToken}, function (data) {
-    geojson_data = JSON.parse(JSON.stringify(data));
-    for (var i = 0; i < geojson_data.features; i++) {
-        geojson_data.features[i].properties['marker-symbol'] = 'marker-15-red';
+    geojson_data = {type: "FeatureCollection", features: []};
+    latest_data = {type: "FeatureCollection", features: []};
+    for (var i = 0; i < data.features.length; i++) {
+        if (data.features[i].properties['date'] === undefined) {
+            geojson_data.features.push(data.features[i]);
+        } else {
+            latest_data.features.push(data.features[i]);
+        };
     }
     console.log("data loaded");
     dataLoaded = true;
@@ -81,8 +87,21 @@ var render_geojson = function () {
         }
     });
 
+    map.addSource('siny_latest_point', {
+        type: 'geojson',
+        data: latest_data
+    });
+    map.addLayer({
+        'id': 'siny_latest_point',
+        'type': 'symbol',
+        'source': 'siny_latest_point',
+        'layout': {
+            'icon-image': 'marker-15-yellow'
+        }
+    });
+
     map.on('click', function (e) {
-        var features = map.queryRenderedFeatures(e.point, {layers: ['siny_points']});
+        var features = map.queryRenderedFeatures(e.point, {layers: ['siny_points', 'siny_latest_point']});
         if (!features.length) {
             return;
         }
@@ -95,7 +114,7 @@ var render_geojson = function () {
     });
 
     map.on('mousemove', function (e) {
-        var features = map.queryRenderedFeatures(e.point, { layers: ['siny_points'] });
+        var features = map.queryRenderedFeatures(e.point, { layers: ['siny_points', 'siny_latest_point']});
         map.getCanvas().style.cursor = features.length ? 'pointer' : '';
     });
 };
