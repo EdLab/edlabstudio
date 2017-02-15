@@ -58,13 +58,24 @@ var dataset_api = "https://api.mapbox.com/datasets/v1/shoha99/ciyloqvms00302wk1s
 $.get(dataset_api, {access_token: accessToken}, function (data) {
     geojson_data = {type: "FeatureCollection", features: []};
     latest_data = {type: "FeatureCollection", features: []};
-    for (var i = 0; i < data.features.length; i++) {
-        if (data.features[i].properties['date'] === undefined) {
-            geojson_data.features.push(data.features[i]);
-        } else {
-            latest_data.features.push(data.features[i]);
-        };
-    }
+
+    var features = data.features;
+    features.sort(function (a, b) {
+        var dateOfA = a.properties.date,
+            dateOfB = b.properties.date;
+        if(!dateOfA && !dateOfB) {
+            return 0;
+        }
+        if(!dateOfA || !dateOfB) {
+            return 1;
+        }
+        return new Date(dateOfA).getTime() - new Date(dateOfB).getTime();
+    })
+
+    var latest = features.pop();
+    latest_data.features.push(latest);
+    geojson_data.features = features;
+
     console.log("data loaded");
     dataLoaded = true;
     if (mapLoaded === true) {
@@ -106,9 +117,13 @@ var render_geojson = function () {
             return;
         }
         var feature = features[0];
+
+        var description = feature.properties.description === undefined ?
+            "<a target='_blank' href='" + feature.properties.vialogue + "'><img width=275 src='" + feature.properties.image + "'></a>" : feature.properties.description;
+
         var popup = new mapboxgl.Popup({offset: [0,-15]})
             .setLngLat(feature.geometry.coordinates)
-            .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>')
+            .setHTML('<h3>' + feature.properties.title + '</h3><p>' + description + '</p>')
             .setLngLat(feature.geometry.coordinates)
             .addTo(map);
     });
