@@ -43,6 +43,7 @@ var mapLoaded = false;
 var dataLoaded = false;
 var geojson_data = null;
 var latest_data = null;
+var detectClose = null;
 
 mapboxgl.accessToken = accessToken.toString();
 var map = new mapboxgl.Map({
@@ -162,7 +163,9 @@ var render_popup = function (feature) {
         .setLngLat(feature.geometry.coordinates)
         .addTo(map);
 
-    history.pushState(null, null, '#' + slugify(feature.properties.title));
+    setTimeout(function () {
+        history.pushState(null, null, '#' + slugify(feature.properties.title));
+    }, 100);
     popup.on('close', function (e) {
         history.pushState(null, null, '/');
     })
