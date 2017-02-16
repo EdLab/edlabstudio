@@ -165,7 +165,7 @@ var render_popup = function (feature) {
 
     setTimeout(function () {
         history.pushState(null, null, '#' + slugify(feature.properties.title));
-    }, 100);
+    }, 0);
     popup.on('close', function (e) {
         history.pushState(null, null, '/');
     })
