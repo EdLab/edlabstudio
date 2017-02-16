@@ -28,6 +28,16 @@
 <div id='map'></div>
 
 <script>
+
+function slugify(text) {
+    return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+}
+
 accessToken = 'pk.eyJ1Ijoic2hvaGE5OSIsImEiOiJaMTFkbWtZIn0.2ohvXTb0qeQUH2I-flBkmg';
 var mapLoaded = false;
 var dataLoaded = false;
@@ -128,12 +138,12 @@ var render_map = function () {
     var current_url = window.location.href;
     var split = current_url.split('/#');
     if (split.length > 1) {
-        var feature_id = split[1];
-        if (latest_data.features[0].properties.id === feature_id) {
+        var feature_slug = split[1];
+        if (slugify(latest_data.features[0].properties.title) === feature_slug) {
             render_popup(latest_data.features[0])
         } else {
             for (var i = 0; i < geojson_data.features.length; i++) {
-                if (geojson_data.features[i].properties.id === feature_id) {
+                if (slugify(geojson_data.features[i].properties.title) === feature_slug) {
                     render_popup(geojson_data.features[i])
                     break;
                 }
@@ -152,7 +162,7 @@ var render_popup = function (feature) {
         .setLngLat(feature.geometry.coordinates)
         .addTo(map);
 
-    history.pushState(null, null, '#' + feature.properties.id);
+    history.pushState(null, null, '#' + slugify(feature.properties.title));
     popup.on('close', function (e) {
         history.pushState(null, null, '/');
     })
