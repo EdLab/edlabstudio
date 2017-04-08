@@ -18,8 +18,8 @@
     z-index: 1030;
 }
 
-.navbar-fixed-top {
-    top: 0;
+.navbar-fixed-bottom {
+    bottom: 40px;
     border-width: 0 0 1px;
 }
 

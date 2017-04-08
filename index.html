@@ -11,6 +11,7 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
     <link href='/header.css' rel='stylesheet' />
+    <link href='/marker_list.css' rel='stylesheet' />
     <style>
         body {
           	margin:0;
@@ -26,7 +27,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-fixed-top">
+<nav class="navbar navbar-fixed-bottom">
     <div class="container">
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 margin--top-10">
@@ -39,6 +40,18 @@
         </div>
     </div>
 </nav>
+
+<div class="marker-list-box">
+    <div class="marker-list-header-box">
+
+    </div>
+    <div class="marker-list-description-box">
+
+    </div>
+    <div class="marker-list-list-box">
+
+    </div>
+</div>
 
 <div id='map'></div>
 
@@ -120,7 +133,8 @@ var render_map = function () {
         'type': 'symbol',
         'source': 'siny_points',
         'layout': {
-            'icon-image': 'marker-15-green'
+            'icon-image': 'marker-15-green',
+            'icon-allow-overlap': true,
         }
     });
 
@@ -133,7 +147,8 @@ var render_map = function () {
         'type': 'symbol',
         'source': 'siny_latest_point',
         'layout': {
-            'icon-image': 'marker-15-yellow'
+            'icon-image': 'marker-15-yellow',
+            'icon-allow-overlap': true,
         }
     });
 
