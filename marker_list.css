@@ -50,16 +50,20 @@
 
 .marker-list-item {
     height: 40px;
-    width: 93%;
-    padding-left: 2%;
+    width: 89%;
+    padding-left: 6%;
     padding-right: 2%;
     margin-right: 3%;
     border-right: 1px solid #dddddd;
     border-bottom: 1px solid #dddddd;
     color: #999999;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .fa.fa-map-marker {
-    font-size: 10px;
+    font-size: 14px;
+    line-height: 40px;
+    margin-right: 10px;
     color: #999999;
 }

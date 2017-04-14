@@ -1,4 +1,7 @@
 function slugify(text) {
+    if (!text) {
+        return;
+    }
     return text.toString().toLowerCase()
         .replace(/\s+/g, '-')           // Replace spaces with -
         .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
@@ -35,6 +38,7 @@ map.on('load', function () {
 })
 
 var dataset_api = "https://api.mapbox.com/datasets/v1/shoha99/ciyloqvms00302wk1sl0tpt1c/features";
+var allFeatures = [];
 $.get(dataset_api, {access_token: accessToken}, function (data) {
     geojson_data = {type: "FeatureCollection", features: []};
     latest_data = {type: "FeatureCollection", features: []};
@@ -52,6 +56,14 @@ $.get(dataset_api, {access_token: accessToken}, function (data) {
         return new Date(dateOfA).getTime() - new Date(dateOfB).getTime();
     })
 
+    var html = '';
+    for (var i = 0; i < features.length; i++) {
+        allFeatures.push(features[i]);
+        html = html + '<div class="marker-list-item" onclick="pre_render_popup(' + i + ')"><i class="fa fa-map-marker" aria-hidden="true"></i>' + features[i].properties.title +'</div>';
+    }
+    $list = $('#markerList');
+    $list.html(html);
+
     var latest = features.pop();
     latest_data.features.push(latest);
     geojson_data.features = features;
@@ -62,6 +74,10 @@ $.get(dataset_api, {access_token: accessToken}, function (data) {
         render_map();
     };
 })
+
+var pre_render_popup = function (i) {
+  render_popup(allFeatures[i]);
+}
 
 var render_map = function () {
     console.log("rendering data");
@@ -124,11 +140,15 @@ var render_map = function () {
     }
 };
 
+var popup = null;
 var render_popup = function (feature) {
     var description = feature.properties.description === undefined ?
         "<a target='_blank' href='" + feature.properties.vialogue + "'><img width=275 src='" + feature.properties.image + "'></a>" : feature.properties.description;
 
-    var popup = new mapboxgl.Popup({offset: [0,-15]})
+    if (popup) {
+        popup.remove();
+    }
+    popup = new mapboxgl.Popup({offset: [0,-15]})
         .setLngLat(feature.geometry.coordinates)
         .setHTML('<h3>' + feature.properties.title + '</h3><p>' + description + '</p>')
         .setLngLat(feature.geometry.coordinates)

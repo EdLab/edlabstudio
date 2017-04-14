@@ -10,7 +10,8 @@
       crossorigin="anonymous"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href='/header.css' rel='stylesheet' />
     <link href='/marker_list.css' rel='stylesheet' />
     <style>
@@ -48,18 +49,9 @@
         <img class="siny-logo" src="/img/logos/siny.jpeg">
     </div>
     <div class="marker-list-description-box">
-        Click the yellow marker for the latest episode. "Seen in NY" are original video stories about NYC's unique learning landscape. "Seen in New York" is only one of the streams at New Learning Times. Sign up to see the rest! wwww.newlearningtimes.com
+        Click the yellow marker for the latest episode. "Seen in NY" are original video stories about NYC's unique learning landscape. "Seen in New York" is only one of the streams at New Learning Times. Sign up to see the rest! <a href="www.newlearningtimes.com">www.newlearningtimes.com</a>
     </div>
-    <div class="marker-list-list-box">
-        <div class="marker-list-item"><i class="fa fa-map-marker" aria-hidden="true"></i></div>
-        <div class="marker-list-item"></div>
-        <div class="marker-list-item"></div>
-        <div class="marker-list-item"></div>
-        <div class="marker-list-item"></div>
-        <div class="marker-list-item"></div>
-        <div class="marker-list-item"></div>
-        <div class="marker-list-item"></div>
-    </div>
+    <div class="marker-list-list-box" id="markerList"></div>
 </div>
 
 <div id='map'></div>
