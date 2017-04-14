@@ -43,15 +43,18 @@
     </div>
 </nav>
 
-<div class="marker-list-box">
-    <div class="marker-list-header-box">
-        "Seen in NY" Episodes from New Learning Times
-        <img class="siny-logo" src="/img/logos/siny.jpeg">
+<div class="marker-list-box" id="markerListBox" style="width: 0">
+    <div id="markerListBoxContent" style="display: none">
+      <div class="marker-list-header-box">
+          "Seen in NY" Episodes from New Learning Times
+          <img class="siny-logo" src="/img/logos/siny.jpeg">
+      </div>
+      <div class="marker-list-description-box">
+          Click the yellow marker for the latest episode. "Seen in NY" are original video stories about NYC's unique learning landscape. "Seen in New York" is only one of the streams at New Learning Times. Sign up to see the rest! <a href="www.newlearningtimes.com">www.newlearningtimes.com</a>
+      </div>
+      <div class="marker-list-list-box" id="markerList"></div>
     </div>
-    <div class="marker-list-description-box">
-        Click the yellow marker for the latest episode. "Seen in NY" are original video stories about NYC's unique learning landscape. "Seen in New York" is only one of the streams at New Learning Times. Sign up to see the rest! <a href="www.newlearningtimes.com">www.newlearningtimes.com</a>
-    </div>
-    <div class="marker-list-list-box" id="markerList"></div>
+    <div class="marker-count" id="markerCount" onclick="toggle_list()"><i class="fa fa-map-marker" aria-hidden="true"></i></div>
 </div>
 
 <div id='map'></div>

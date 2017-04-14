@@ -64,6 +64,9 @@ $.get(dataset_api, {access_token: accessToken}, function (data) {
     $list = $('#markerList');
     $list.html(html);
 
+    $count = $('#markerCount');
+    $count.append(features.length);
+
     var latest = features.pop();
     latest_data.features.push(latest);
     geojson_data.features = features;
@@ -74,6 +77,27 @@ $.get(dataset_api, {access_token: accessToken}, function (data) {
         render_map();
     };
 })
+
+var toggle_list = function () {
+  var $listBox = $('#markerListBox');
+  var $list = $('#markerList');
+  var $listBoxContent = $('#markerListBoxContent');
+  if ($listBox.width() > 0) {
+    $list.hide();
+    setTimeout(function () {
+      $listBoxContent.hide();
+    }, 125)
+    $listBox.width(0);
+  } else {
+    $listBox.width(350);
+    setTimeout(function () {
+      $listBoxContent.show();
+    }, 100)
+    setTimeout(function () {
+      $list.show();
+    }, 500)
+  }
+}
 
 var pre_render_popup = function (i) {
   render_popup(allFeatures[i]);
