@@ -56,10 +56,19 @@ $.get(dataset_api, {access_token: accessToken}, function (data) {
         return new Date(dateOfA).getTime() - new Date(dateOfB).getTime();
     })
 
+    allFeatures = features.slice();
+    allFeatures.sort(function (a, b) {
+        if (a.properties.title < b.properties.title) {
+            return -1;
+        }
+        if (a.properties.title > b.properties.title) {
+            return 1;
+        }
+        return 0;
+    })
     var html = '';
-    for (var i = 0; i < features.length; i++) {
-        allFeatures.push(features[i]);
-        html = html + '<div class="marker-list-item" onclick="pre_render_popup(' + i + ')"><i class="fa fa-map-marker" aria-hidden="true"></i>' + features[i].properties.title +'</div>';
+    for (var i = 0; i < allFeatures.length; i++) {
+        html = html + '<div class="marker-list-item" onclick="pre_render_popup(' + i + ')"><i class="fa fa-map-marker" aria-hidden="true"></i>' + allFeatures[i].properties.title +'</div>';
     }
     $list = $('#markerList');
     $list.html(html);
