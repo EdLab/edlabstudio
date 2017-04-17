@@ -107,6 +107,9 @@ var toggle_list = function () {
     }, 500)
   }
 }
+setTimeout(function () {
+  toggle_list()
+}, 1000)
 
 var pre_render_popup = function (i) {
   render_popup(allFeatures[i]);
